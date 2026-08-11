@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Invoice Generator — No Signup, Nothing Uploaded</title>
+<meta name="description" content="Make a clean, professional invoice in your browser. No account, no upload, no watermark — your data never leaves this page. Print or save as PDF.">
+<style>
+  :root {
+    --navy: #1e293b; --teal: #0ea5a5; --teal-dark: #0b8484; --light: #f1f5f9;
+    --border: #cbd5e1; --muted: #64748b; --red: #dc2626; --bg: #eef2f6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--navy); line-height: 1.45;
+  }
+  .topbar { background: var(--navy); color: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .topbar h1 { font-size: 18px; font-weight: 700; letter-spacing: .2px; }
+  .topbar h1 span { color: var(--teal); }
+  .topbar .sub { font-size: 12.5px; color: #cbd5e1; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  button {
+    font: inherit; cursor: pointer; border: 1px solid var(--border); background: #fff;
+    color: var(--navy); border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 600;
+  }
+  button:hover { background: var(--light); }
+  button.primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+  button.primary:hover { background: var(--teal-dark); }
+  button.ghost { background: transparent; color: #fff; border-color: #475569; }
+  button.ghost:hover { background: #334155; }
+  .wrap { max-width: 880px; margin: 26px auto 80px; padding: 0 16px; }
+  .sheet {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 42px 46px; box-shadow: 0 8px 30px rgba(15,23,42,.08);
+  }
+  .row { display: flex; gap: 24px; justify-content: space-between; flex-wrap: wrap; }
+  .inv-head { align-items: flex-start; margin-bottom: 34px; }
+  .logo-zone { width: 150px; }
+  #logoBox {
+    width: 130px; height: 74px; border: 1.5px dashed var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--muted);
+    cursor: pointer; overflow: hidden; text-align: center; padding: 4px;
+  }
+  #logoBox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .inv-meta { text-align: right; }
+  .inv-meta .big { font-size: 30px; font-weight: 800; letter-spacing: 1px; color: var(--navy); }
+  [contenteditable] { outline: none; border-radius: 4px; padding: 1px 4px; min-width: 30px; }
+  [contenteditable]:hover { background: #f8fafc; box-shadow: inset 0 0 0 1px var(--border); }
+  [contenteditable]:focus { background: #fff; box-shadow: inset 0 0 0 2px var(--teal); }
+  [contenteditable]:empty::before { content: attr(data-ph); color: #94a3b8; }
+  .meta-grid { display: grid; grid-template-columns: auto auto; gap: 4px 10px; font-size: 14px; margin-top: 10px; justify-content: end; }
+  .meta-grid .k { color: var(--muted); text-align: right; }
+  .parties { margin: 8px 0 30px; }
+  .party { flex: 1; min-width: 220px; }
+  .party h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--teal-dark); margin-bottom: 7px; }
+  .party div { font-size: 14.5px; }
+  .party .name { font-weight: 700; font-size: 15.5px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  thead th {
+    background: var(--navy); color: #fff; font-size: 12px; text-transform: uppercase;
+    letter-spacing: .8px; padding: 9px 10px; text-align: left;
+  }
+  thead th.r, td.r { text-align: right; }
+  tbody td { border-bottom: 1px solid #e2e8f0; padding: 9px 10px; font-size: 14.5px; vertical-align: top; }
+  tbody tr:hover .rowdel { opacity: 1; }
+  .rowdel {
+    opacity: 0; border: none; background: none; color: var(--red); font-size: 16px;
+    padding: 0 4px; font-weight: 700; line-height: 1;
+  }
+  .qty, .rate { min-width: 54px; display: inline-block; text-align: right; }
+  .amount { font-variant-numeric: tabular-nums; }
+  #addRow { margin-top: 10px; font-size: 13.5px; padding: 6px 12px; }
+  .totals { margin-top: 18px; margin-left: auto; width: 300px; font-size: 14.5px; }
+  .totals .line { display: flex; justify-content: space-between; padding: 5px 0; }
+  .totals .line.grand { border-top: 2px solid var(--navy); margin-top: 6px; padding-top: 10px; font-size: 18px; font-weight: 800; }
+  .totals .k { color: var(--muted); }
+  .totals input { width: 62px; font: inherit; text-align: right; border: 1px solid var(--border); border-radius: 5px; padding: 2px 5px; }
+  .notes { margin-top: 34px; }
+  .notes h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--teal-dark); margin-bottom: 6px; }
+  .notes div { font-size: 13.5px; color: #334155; }
+  .controls-inline { display: flex; gap: 14px; align-items: center; margin: 18px 2px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted); }
+  .controls-inline select { font: inherit; padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; }
+  footer { text-align: center; margin-top: 34px; font-size: 13px; color: var(--muted); }
+  footer a { color: var(--teal-dark); font-weight: 600; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .privacy { margin-top: 6px; font-size: 12px; }
+  @media print {
+    body { background: #fff; }
+    .topbar, .controls-inline, #addRow, .rowdel, footer, .noprint { display: none !important; }
+    .wrap { margin: 0; max-width: none; padding: 0; }
+    .sheet { border: none; box-shadow: none; border-radius: 0; padding: 10px 6px; }
+    [contenteditable]:hover, [contenteditable]:focus { background: none; box-shadow: none; }
+    #logoBox { border: none; }
+    #logoBox.empty { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar noprint">
+  <div>
+    <h1>Invoice<span>Now</span></h1>
+    <div class="sub">No signup · no upload · no watermark — everything stays in your browser</div>
+  </div>
+  <div class="actions">
+    <button class="ghost" id="btnClear">New invoice</button>
+    <button class="ghost" id="btnSave">Save draft</button>
+    <button class="primary" id="btnPrint">Print / Save PDF</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="controls-inline noprint">
+    <label>Currency
+      <select id="currency">
+        <option value="USD" selected>$ USD</option>
+        <option value="EUR">€ EUR</option>
+        <option value="GBP">£ GBP</option>
+        <option value="CAD">$ CAD</option>
+        <option value="AUD">$ AUD</option>
+        <option value="INR">₹ INR</option>
+        <option value="JPY">¥ JPY</option>
+      </select>
+    </label>
+    <span>Tip: click any text on the invoice to edit it.</span>
+  </div>
+
+  <div class="sheet" id="sheet">
+    <div class="row inv-head">
+      <div class="logo-zone">
+        <div id="logoBox" class="empty" title="Click to add your logo (stays on your device)">+ Your logo</div>
+        <input type="file" id="logoInput" accept="image/*" style="display:none">
+      </div>
+      <div class="inv-meta">
+        <div class="big">INVOICE</div>
+        <div class="meta-grid">
+          <span class="k">Invoice #</span><span contenteditable id="invNo" data-ph="0001">0001</span>
+          <span class="k">Issued</span><span contenteditable id="dateIssued" data-ph="Aug 11, 2026"></span>
+          <span class="k">Due</span><span contenteditable id="dateDue" data-ph="On receipt"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row parties">
+      <div class="party">
+        <h3>From</h3>
+        <div class="name" contenteditable data-ph="Your name / business"></div>
+        <div contenteditable data-ph="Email"></div>
+        <div contenteditable data-ph="Address (optional)"></div>
+        <div contenteditable data-ph="Phone (optional)"></div>
+      </div>
+      <div class="party">
+        <h3>Bill to</h3>
+        <div class="name" contenteditable data-ph="Client name / company"></div>
+        <div contenteditable data-ph="Client email"></div>
+        <div contenteditable data-ph="Client address (optional)"></div>
+      </div>
+    </div>
+
+    <table id="itemsTable">
+      <thead>
+        <tr><th style="width:52%">Description</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Amount</th><th style="width:26px"></th></tr>
+      </thead>
+      <tbody id="itemsBody"></tbody>
+    </table>
+    <button id="addRow" class="noprint">+ Add line item</button>
+
+    <div class="totals">
+      <div class="line"><span class="k">Subtotal</span><span id="subtotal" class="amount">$0.00</span></div>
+      <div class="line noprint-input"><span class="k">Discount <input type="number" id="discountPct" min="0" max="100" step="0.5" value="0">%</span><span id="discountAmt" class="amount">−$0.00</span></div>
+      <div class="line"><span class="k">Tax <input type="number" id="taxPct" min="0" max="60" step="0.25" value="0">%</span><span id="taxAmt" class="amount">$0.00</span></div>
+      <div class="line grand"><span>Total due</span><span id="grand" class="amount">$0.00</span></div>
+    </div>
+
+    <div class="notes">
+      <h3>Notes / payment details</h3>
+      <div contenteditable data-ph="e.g. Payment by bank transfer to … · Thank you for your business!"></div>
+    </div>
+  </div>
+
+  <footer class="noprint">
+    <div>Free forever. Built end-to-end by <strong>Claude (an AI)</strong> as part of an honest experiment: earn $100 online.</div>
+    <div style="margin-top:4px">Found it useful? <a id="tipLink" href="https://hustlerjimmy.gumroad.com/l/money-dashboard" target="_blank" rel="noopener">Grab the Money Dashboard it also built ($10+)</a> — that's the whole business model.</div>
+    <div class="privacy">Privacy: this page makes zero network requests. Your invoice never leaves your device. Drafts save to your browser only.</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var SYMBOLS = { USD:"$", EUR:"€", GBP:"£", CAD:"$", AUD:"$", INR:"₹", JPY:"¥" };
+  var state = { currency: "USD" };
+  var $ = function (id) { return document.getElementById(id); };
+
+  function fmt(n) {
+    var cur = state.currency;
+    try {
+      return new Intl.NumberFormat(undefined, { style:"currency", currency:cur,
+        minimumFractionDigits: cur==="JPY"?0:2, maximumFractionDigits: cur==="JPY"?0:2 }).format(n);
+    } catch (e) { return (SYMBOLS[cur]||"$") + n.toFixed(2); }
+  }
+
+  function addRow(desc, qty, rate) {
+    var tb = $("itemsBody");
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><div contenteditable class="desc" data-ph="Describe the work…">' + (desc||"") + '</div></td>' +
+      '<td class="r"><span contenteditable class="qty" data-ph="1">' + (qty!=null?qty:"") + '</span></td>' +
+      '<td class="r"><span contenteditable class="rate" data-ph="0.00">' + (rate!=null?rate:"") + '</span></td>' +
+      '<td class="r amount">' + fmt(0) + '</td>' +
+      '<td><button class="rowdel noprint" title="Remove line" type="button">×</button></td>';
+    tb.appendChild(tr);
+    recalc();
+  }
+
+  function num(el) {
+    var v = parseFloat(String(el.textContent).replace(/[^0-9.\-]/g, ""));
+    return isNaN(v) ? 0 : v;
+  }
+
+  function recalc() {
+    var sub = 0;
+    var rows = $("itemsBody").rows;
+    for (var i = 0; i < rows.length; i++) {
+      var q = num(rows[i].querySelector(".qty"));
+      var r = num(rows[i].querySelector(".rate"));
+      var amt = q * r;
+      rows[i].querySelector(".amount").textContent = fmt(amt);
+      sub += amt;
+    }
+    var dPct = parseFloat($("discountPct").value) || 0;
+    var tPct = parseFloat($("taxPct").value) || 0;
+    var disc = sub * dPct / 100;
+    var tax = (sub - disc) * tPct / 100;
+    $("subtotal").textContent = fmt(sub);
+    $("discountAmt").textContent = "−" + fmt(disc);
+    $("taxAmt").textContent = fmt(tax);
+    $("grand").textContent = fmt(sub - disc + tax);
+  }
+
+  // events
+  document.addEventListener("input", recalc);
+  $("itemsBody").addEventListener("click", function (e) {
+    if (e.target.classList.contains("rowdel")) {
+      e.target.closest("tr").remove();
+      recalc();
+    }
+  });
+  $("addRow").addEventListener("click", function () { addRow(); });
+  $("currency").addEventListener("change", function () {
+    state.currency = this.value; recalc();
+  });
+  $("btnPrint").addEventListener("click", function () { window.print(); });
+
+  // logo (never leaves the device)
+  $("logoBox").addEventListener("click", function () { $("logoInput").click(); });
+  $("logoInput").addEventListener("change", function () {
+    var f = this.files && this.files[0];
+    if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () {
+      $("logoBox").innerHTML = '<img alt="logo" src="' + rd.result + '">';
+      $("logoBox").classList.remove("empty");
+      saveDraft(true);
+    };
+    rd.readAsDataURL(f);
+  });
+
+  // drafts (localStorage, fails silently where unavailable)
+  function saveDraft(silent) {
+    try {
+      localStorage.setItem("invoicenow_draft", JSON.stringify({
+        html: $("sheet").innerHTML, currency: state.currency,
+        d: $("discountPct").value, t: $("taxPct").value
+      }));
+      if (!silent) flash($("btnSave"), "Saved ✓");
+    } catch (e) { if (!silent) flash($("btnSave"), "Unavailable"); }
+  }
+  function loadDraft() {
+    try {
+      var raw = localStorage.getItem("invoicenow_draft");
+      if (!raw) return false;
+      var d = JSON.parse(raw);
+      $("sheet").innerHTML = d.html;
+      state.currency = d.currency || "USD";
+      $("currency").value = state.currency;
+      $("discountPct").value = d.d || 0;
+      $("taxPct").value = d.t || 0;
+      rebind();
+      recalc();
+      return true;
+    } catch (e) { return false; }
+  }
+  function rebind() {
+    var lb = $("logoBox");
+    if (lb) lb.addEventListener("click", function () { $("logoInput") && $("logoInput").click(); });
+  }
+  function flash(btn, txt) {
+    var old = btn.textContent; btn.textContent = txt;
+    setTimeout(function () { btn.textContent = old; }, 1400);
+  }
+  $("btnSave").addEventListener("click", function () { saveDraft(false); });
+  $("btnClear").addEventListener("click", function () {
+    try { localStorage.removeItem("invoicenow_draft"); } catch (e) {}
+    location.reload();
+  });
+
+  // init
+  var today = new Date();
+  var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  if (!loadDraft()) {
+    $("dateIssued").textContent = months[today.getMonth()] + " " + today.getDate() + ", " + today.getFullYear();
+    $("dateDue").textContent = "On receipt";
+    addRow("", 1, null);
+    addRow("", 1, null);
+  }
+  recalc();
+})();
+</script>
+</body>
+</html>
