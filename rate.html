@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freelance Rate Calculator — What Should I Charge? (No Signup)</title>
+<meta name="description" content="Work out your real freelance hourly rate from the income you actually want to keep — after business costs, taxes, and non-billable time. Free, no signup, nothing leaves your browser.">
+<style>
+  :root { --navy:#1e293b; --teal:#0ea5a5; --teal-d:#0b8484; --light:#f1f5f9; --border:#cbd5e1;
+          --muted:#64748b; --bg:#eef2f6; --orange:#f97316; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         background:var(--bg); color:var(--navy); line-height:1.5; }
+  .topbar { background:var(--navy); color:#fff; padding:14px 20px; }
+  .topbar h1 { font-size:18px; font-weight:700; } .topbar h1 span { color:var(--teal); }
+  .topbar .sub { font-size:12.5px; color:#cbd5e1; }
+  .wrap { max-width:860px; margin:26px auto 70px; padding:0 16px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  @media (max-width:720px){ .grid { grid-template-columns:1fr; } }
+  .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:26px 28px;
+          box-shadow:0 8px 30px rgba(15,23,42,.07); }
+  .card h2 { font-size:12px; text-transform:uppercase; letter-spacing:1.2px; color:var(--teal-d); margin-bottom:16px; }
+  label { display:block; font-size:13.5px; color:#334155; font-weight:600; margin:14px 0 5px; }
+  label:first-of-type { margin-top:0; }
+  .hint { font-weight:400; color:var(--muted); font-size:12px; }
+  input { width:100%; font:inherit; font-size:16px; padding:9px 12px; border:1.5px solid var(--border);
+          border-radius:8px; }
+  input:focus { outline:none; border-color:var(--teal); }
+  .rate-hero { text-align:center; padding:10px 0 18px; border-bottom:1px solid #e2e8f0; margin-bottom:14px; }
+  .rate-hero .num { font-size:52px; font-weight:800; color:var(--teal-d); letter-spacing:-1px; }
+  .rate-hero .lbl { font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+  .row { display:flex; justify-content:space-between; padding:8px 0; font-size:14.5px; border-bottom:1px dashed #e2e8f0; }
+  .row:last-child { border-bottom:none; }
+  .row .k { color:var(--muted); } .row .v { font-weight:700; font-variant-numeric:tabular-nums; }
+  .note { margin-top:14px; font-size:12.5px; color:var(--muted); background:var(--light);
+          border-radius:8px; padding:10px 12px; }
+  footer { text-align:center; margin-top:30px; font-size:13px; color:var(--muted); }
+  footer a { color:var(--teal-d); font-weight:600; text-decoration:none; }
+  footer a:hover { text-decoration:underline; }
+  .cta { margin-top:22px; background:var(--navy); border-radius:10px; padding:16px 18px; color:#e2e8f0;
+         font-size:13.5px; }
+  .cta a { color:#5eead4; font-weight:700; text-decoration:none; }
+  .cta a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>Rate<span>Right</span></h1>
+  <div class="sub">The freelance rate you actually need — after costs, taxes, and all the hours nobody pays for</div>
+</div>
+
+<div class="wrap">
+  <div class="grid">
+    <div class="card">
+      <h2>Your numbers</h2>
+      <label>Income you want to keep per year <span class="hint">(after business costs & tax set-aside)</span></label>
+      <input type="number" id="income" value="60000" min="0" step="1000">
+      <label>Business costs per year <span class="hint">(software, gear, insurance, fees…)</span></label>
+      <input type="number" id="costs" value="4800" min="0" step="100">
+      <label>Tax set-aside % <span class="hint">(US freelancers typically 25–30%)</span></label>
+      <input type="number" id="tax" value="28" min="0" max="60" step="1">
+      <label>Billable hours per week <span class="hint">(admin, marketing & email aren't billable — most freelancers bill 20–30 of a 40h week)</span></label>
+      <input type="number" id="hours" value="25" min="1" max="80" step="1">
+      <label>Weeks off per year <span class="hint">(vacation + sick + holidays)</span></label>
+      <input type="number" id="weeksOff" value="4" min="0" max="30" step="1">
+    </div>
+
+    <div class="card">
+      <h2>Charge at least</h2>
+      <div class="rate-hero">
+        <div class="num" id="hourly">$0</div>
+        <div class="lbl">per hour</div>
+      </div>
+      <div class="row"><span class="k">Day rate (8 billable hrs)</span><span class="v" id="day">$0</span></div>
+      <div class="row"><span class="k">Week rate</span><span class="v" id="week">$0</span></div>
+      <div class="row"><span class="k">Gross revenue this requires</span><span class="v" id="gross">$0</span></div>
+      <div class="row"><span class="k">Billable hours per year</span><span class="v" id="byear">0</span></div>
+      <div class="row"><span class="k">Set aside for taxes</span><span class="v" id="taxAmt">$0</span></div>
+      <div class="note" id="story"></div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <strong>Next step:</strong> know your rate, then run the business side in 10 min/week —
+    <a href="https://hustlerjimmy.gumroad.com/l/freelancer-finance" target="_blank" rel="noopener">Freelancer Finance OS</a>
+    tracks invoices, expenses, per-client totals and quarterly tax. Send the invoices free with
+    <a href="./index.html">InvoiceNow</a>.
+  </div>
+
+  <footer>
+    <div>Free forever. Built end-to-end by <strong>Claude (an AI)</strong> as part of an honest experiment: earn $100 online.</div>
+    <div style="margin-top:4px">Nothing you type leaves this page — zero network requests, no analytics.</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function money(n) {
+    return "$" + Math.round(n).toLocaleString("en-US");
+  }
+  function calc() {
+    var income  = Math.max(0, parseFloat($("income").value) || 0);
+    var costs   = Math.max(0, parseFloat($("costs").value) || 0);
+    var tax     = Math.min(60, Math.max(0, parseFloat($("tax").value) || 0)) / 100;
+    var hrsWk   = Math.min(80, Math.max(0, parseFloat($("hours").value) || 0));
+    var offWks  = Math.min(30, Math.max(0, parseFloat($("weeksOff").value) || 0));
+
+    var billableYear = (52 - offWks) * hrsWk;
+    if (billableYear <= 0 || (1 - tax) <= 0) {
+      $("hourly").textContent = "—";
+      return;
+    }
+    // Gross needed so that after tax set-aside on profit, you keep `income`:
+    // profit = gross - costs ; keep = profit * (1 - tax)  =>  gross = income/(1-tax) + costs
+    var gross  = income / (1 - tax) + costs;
+    var hourly = Math.ceil((gross / billableYear) / 5) * 5;   // round up to $5
+    var profit = gross - costs;
+    var taxAmt = profit * tax;
+
+    $("hourly").textContent = money(hourly);
+    $("day").textContent    = money(hourly * 8);
+    $("week").textContent   = money(hourly * hrsWk);
+    $("gross").textContent  = money(gross);
+    $("byear").textContent  = billableYear.toLocaleString("en-US");
+    $("taxAmt").textContent = money(taxAmt) + " / yr";
+    $("story").textContent  = "At " + money(hourly) + "/hr × " + billableYear.toLocaleString("en-US") +
+      " billable hours you gross ≈ " + money(hourly * billableYear) + ". After " + money(costs) +
+      " in costs and " + Math.round(tax*100) + "% set aside for taxes, you keep ≈ " +
+      money((hourly * billableYear - costs) * (1 - tax)) + " — at or above your " +
+      money(income) + " target.";
+  }
+  document.addEventListener("input", calc);
+  calc();
+})();
+</script>
+</body>
+</html>
