@@ -3,8 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free Invoice Generator — No Signup, Nothing Uploaded</title>
-<meta name="description" content="Make a clean, professional invoice in your browser. No account, no upload, no watermark — your data never leaves this page. Print or save as PDF.">
+<title>Free Invoice Generator — No Signup, No Watermark | InvoiceNow</title>
+<meta name="description" content="Create and print a professional invoice free in your browser. No sign-up, no watermark, no upload — your data never leaves your device. Save as PDF in one click.">
+<link rel="canonical" href="https://jimmyhustla36-ship-it.github.io/invoicenow/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Invoice Generator — No Signup, No Watermark">
+<meta property="og:description" content="Create and print a professional invoice free in your browser. Nothing is uploaded — your data never leaves your device.">
+<meta property="og:url" content="https://jimmyhustla36-ship-it.github.io/invoicenow/">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"InvoiceNow",
+"url":"https://jimmyhustla36-ship-it.github.io/invoicenow/",
+"applicationCategory":"BusinessApplication","operatingSystem":"Any (web browser)",
+"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+"description":"Free browser-based invoice generator. No sign-up, no watermark, no upload — invoice data stays on your device.",
+"featureList":["Unlimited free invoices","No account required","Print or save as PDF","Add your logo","7 currencies","Automatic totals, tax and discount"]}
+</script>
 <style>
   :root {
     --navy: #1e293b; --teal: #0ea5a5; --teal-dark: #0b8484; --light: #f1f5f9;
@@ -81,6 +96,14 @@
   .notes div { font-size: 13.5px; color: #334155; }
   .controls-inline { display: flex; gap: 14px; align-items: center; margin: 18px 2px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted); }
   .controls-inline select { font: inherit; padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; }
+  .seo { max-width: 780px; margin: 38px auto 0; background: #fff; border: 1px solid var(--border);
+         border-radius: 12px; padding: 28px 32px; font-size: 14.5px; color: #334155; }
+  .seo h2 { font-size: 19px; color: var(--navy); margin-bottom: 10px; }
+  .seo h3 { font-size: 15px; color: var(--navy); margin: 20px 0 8px; }
+  .seo p { margin-bottom: 9px; }
+  .seo ol { margin: 0 0 4px 20px; }
+  .seo li { margin-bottom: 5px; }
+  .seo a { color: var(--teal-dark); font-weight: 600; }
   footer { text-align: center; margin-top: 34px; font-size: 13px; color: var(--muted); }
   footer a { color: var(--teal-dark); font-weight: 600; text-decoration: none; }
   footer a:hover { text-decoration: underline; }
@@ -178,11 +201,44 @@
     </div>
   </div>
 
+  <section class="seo noprint">
+    <h2>A free invoice generator that doesn't ask for anything</h2>
+    <p>Most "free" invoice tools want an email address, cap you at three invoices, or stamp a
+    watermark across the page. This one doesn't. It's a single HTML file that runs entirely in
+    your browser: no account, no upload, no limit, no watermark, and no network requests at all.
+    Fill in the fields, click <em>Print / Save PDF</em>, and send it.</p>
+
+    <h3>How to make an invoice in about 60 seconds</h3>
+    <ol>
+      <li>Add your name and your client's details — click any text on the invoice to edit it.</li>
+      <li>Add a line item per piece of work, with quantity and rate. Totals calculate themselves.</li>
+      <li>Set a tax or discount percentage if you need one.</li>
+      <li>Click <strong>Print / Save PDF</strong> and choose "Save as PDF" as the destination.</li>
+    </ol>
+
+    <h3>Common questions</h3>
+    <p><strong>Is it really free?</strong> Yes, with no invoice limit and no account. The page is
+    static and costs nothing to run.</p>
+    <p><strong>Where does my data go?</strong> Nowhere. There are no analytics and no server calls.
+    If you click "Save draft," it's stored in your own browser only — clearing site data erases it.</p>
+    <p><strong>Can I add my logo?</strong> Yes — click the logo box. The image is read locally and
+    embedded into the page; it is never uploaded anywhere.</p>
+    <p><strong>How do I make a PDF?</strong> Use Print / Save PDF and pick "Save as PDF" as the
+    printer. The on-screen controls are hidden automatically in the printed version.</p>
+    <p><strong>Does it work on a phone?</strong> Yes, though a wider screen is easier for the
+    line-item table.</p>
+    <p><strong>Can I invoice in euros or pounds?</strong> Yes — USD, EUR, GBP, CAD, AUD, INR and
+    JPY are supported in the currency picker.</p>
+
+    <h3>Related free tools</h3>
+    <p><a href="./rate.html">RateRight — freelance rate calculator</a>: work out the hourly rate you
+    actually need, after business costs, taxes and non-billable hours.</p>
+  </section>
+
   <footer class="noprint">
     <div>Free forever. Built end-to-end by <strong>Claude (an AI)</strong> as part of an honest experiment: earn $100 online.</div>
-    <div style="margin-top:4px">Found it useful? The same AI also built <a href="https://hustlerjimmy.gumroad.com/l/money-dashboard" target="_blank" rel="noopener">a Money Dashboard ($10+)</a> and <a href="https://hustlerjimmy.gumroad.com/l/freelancer-finance" target="_blank" rel="noopener">Freelancer Finance OS ($12+)</a> — that's the whole business model.</div>
+    <div style="margin-top:4px">If you want the bookkeeping side handled too, the same AI built <a href="https://hustlerjimmy.gumroad.com/l/money-dashboard" target="_blank" rel="noopener">a Money Dashboard ($10+)</a> and <a href="https://hustlerjimmy.gumroad.com/l/freelancer-finance" target="_blank" rel="noopener">Freelancer Finance OS ($12+)</a> — that's the whole business model.</div>
     <div class="privacy">Privacy: this page makes zero network requests. Your invoice never leaves your device. Drafts save to your browser only.</div>
-    <div style="margin-top:6px">More free tools: <a href="./rate.html">RateRight — what should I charge?</a></div>
   </footer>
 </div>
 

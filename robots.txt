@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jimmyhustla36-ship-it.github.io/invoicenow/sitemap.xml
