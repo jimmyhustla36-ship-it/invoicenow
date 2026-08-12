@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>50/30/20 Budget Calculator — Free, No Signup | BudgetSplit</title>
+<meta name="description" content="Free 50/30/20 budget calculator. Enter your take-home pay and see exactly what to spend on needs, wants and savings — plus your real savings rate. No signup, nothing leaves your browser.">
+<link rel="canonical" href="https://jimmyhustla36-ship-it.github.io/invoicenow/budget.html">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="50/30/20 Budget Calculator — Free, No Signup">
+<meta property="og:description" content="See exactly what to spend on needs, wants and savings from your take-home pay. Free, private, no signup.">
+<meta property="og:url" content="https://jimmyhustla36-ship-it.github.io/invoicenow/budget.html">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"BudgetSplit — 50/30/20 Budget Calculator",
+"url":"https://jimmyhustla36-ship-it.github.io/invoicenow/budget.html",
+"applicationCategory":"FinanceApplication","operatingSystem":"Any (web browser)",
+"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+"description":"Free 50/30/20 budget calculator showing needs, wants and savings targets from take-home pay, with a custom-split mode and real savings-rate feedback."}
+</script>
+<style>
+  :root { --navy:#1e293b; --teal:#0ea5a5; --teal-d:#0b8484; --light:#f1f5f9; --border:#cbd5e1;
+          --muted:#64748b; --bg:#eef2f6; --orange:#f97316; --green:#16a34a; --red:#dc2626; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         background:var(--bg); color:var(--navy); line-height:1.5; }
+  .topbar { background:var(--navy); color:#fff; padding:14px 20px; }
+  .topbar h1 { font-size:18px; font-weight:700; } .topbar h1 span { color:var(--teal); }
+  .topbar .sub { font-size:12.5px; color:#cbd5e1; }
+  .wrap { max-width:880px; margin:26px auto 70px; padding:0 16px; }
+  .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:26px 28px;
+          box-shadow:0 8px 30px rgba(15,23,42,.07); }
+  .card + .card { margin-top:22px; }
+  h2.sec { font-size:12px; text-transform:uppercase; letter-spacing:1.2px; color:var(--teal-d); margin-bottom:16px; }
+  label { display:block; font-size:13.5px; color:#334155; font-weight:600; margin:14px 0 5px; }
+  label:first-of-type { margin-top:0; }
+  .hint { font-weight:400; color:var(--muted); font-size:12px; }
+  input[type=number], select { width:100%; font:inherit; font-size:16px; padding:9px 12px;
+          border:1.5px solid var(--border); border-radius:8px; background:#fff; }
+  input:focus, select:focus { outline:none; border-color:var(--teal); }
+  .split-row { display:flex; gap:12px; }
+  .split-row > div { flex:1; }
+  .bars { margin-top:20px; }
+  .bar { margin-bottom:16px; }
+  .bar .top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+  .bar .name { font-weight:700; font-size:15px; }
+  .bar .amt { font-size:20px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .bar .track { height:12px; background:var(--light); border-radius:99px; overflow:hidden; }
+  .bar .fill { height:100%; border-radius:99px; }
+  .bar .note { font-size:12.5px; color:var(--muted); margin-top:5px; }
+  .needs .amt, .needs .fill { color:var(--navy); background:var(--navy); }
+  .needs .amt { background:none; }
+  .wants .amt { color:var(--orange); } .wants .fill { background:var(--orange); }
+  .save .amt { color:var(--teal-d); } .save .fill { background:var(--teal); }
+  .verdict { margin-top:18px; padding:13px 15px; border-radius:9px; font-size:14px; background:var(--light); }
+  .verdict strong { display:block; margin-bottom:3px; }
+  .monthly-yearly { display:flex; gap:10px; margin-top:14px; }
+  .toggle { flex:1; text-align:center; padding:8px; border:1.5px solid var(--border); border-radius:8px;
+            cursor:pointer; font-size:13.5px; font-weight:600; color:var(--muted); background:#fff; }
+  .toggle.on { border-color:var(--teal); color:var(--teal-d); background:#f0fdfa; }
+  .cta { margin-top:22px; background:var(--navy); border-radius:10px; padding:16px 18px; color:#e2e8f0; font-size:13.5px; }
+  .cta a { color:#5eead4; font-weight:700; text-decoration:none; }
+  .cta a:hover { text-decoration:underline; }
+  .seo { background:#fff; border:1px solid var(--border); border-radius:12px; padding:28px 32px;
+         margin-top:22px; font-size:14.5px; color:#334155; }
+  .seo h2 { font-size:19px; color:var(--navy); margin-bottom:10px; }
+  .seo h3 { font-size:15px; color:var(--navy); margin:20px 0 8px; }
+  .seo p { margin-bottom:9px; }
+  .seo ul { margin:0 0 4px 20px; } .seo li { margin-bottom:6px; }
+  .seo a { color:var(--teal-d); font-weight:600; }
+  footer { text-align:center; margin-top:30px; font-size:13px; color:var(--muted); }
+  footer a { color:var(--teal-d); font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>Budget<span>Split</span></h1>
+  <div class="sub">What should you actually spend on needs, wants and savings? Free, private, no signup.</div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h2 class="sec">Your pay</h2>
+    <label>Take-home pay <span class="hint">(after tax — what actually lands in your account)</span></label>
+    <input type="number" id="pay" value="4000" min="0" step="100">
+    <div class="monthly-yearly">
+      <div class="toggle on" id="tMonth">per month</div>
+      <div class="toggle" id="tYear">per year</div>
+    </div>
+
+    <label style="margin-top:20px">Split style</label>
+    <select id="style">
+      <option value="50,30,20" selected>50 / 30 / 20 — the classic</option>
+      <option value="60,20,20">60 / 20 / 20 — high cost of living</option>
+      <option value="50,20,30">50 / 20 / 30 — aggressive saving</option>
+      <option value="70,20,10">70 / 20 / 10 — tight budget</option>
+      <option value="custom">Custom…</option>
+    </select>
+    <div id="customWrap" style="display:none">
+      <div class="split-row" style="margin-top:12px">
+        <div><label>Needs %</label><input type="number" id="cN" value="50" min="0" max="100"></div>
+        <div><label>Wants %</label><input type="number" id="cW" value="30" min="0" max="100"></div>
+        <div><label>Savings %</label><input type="number" id="cS" value="20" min="0" max="100"></div>
+      </div>
+      <div class="hint" id="customWarn" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="sec">Your monthly budget</h2>
+    <div class="bars">
+      <div class="bar needs">
+        <div class="top"><span class="name">Needs</span><span class="amt" id="aNeeds">$0</span></div>
+        <div class="track"><div class="fill" id="fNeeds" style="width:50%"></div></div>
+        <div class="note">Rent or mortgage, utilities, groceries, insurance, minimum debt payments, transport to work.</div>
+      </div>
+      <div class="bar wants">
+        <div class="top"><span class="name">Wants</span><span class="amt" id="aWants">$0</span></div>
+        <div class="track"><div class="fill" id="fWants" style="width:30%"></div></div>
+        <div class="note">Eating out, streaming, hobbies, travel, shopping beyond the basics.</div>
+      </div>
+      <div class="bar save">
+        <div class="top"><span class="name">Savings &amp; extra debt payoff</span><span class="amt" id="aSave">$0</span></div>
+        <div class="track"><div class="fill" id="fSave" style="width:20%"></div></div>
+        <div class="note">Emergency fund, retirement, investments, and anything above the minimum on debt.</div>
+      </div>
+    </div>
+    <div class="verdict" id="verdict"></div>
+  </div>
+
+  <div class="cta">
+    <strong>Want to track it, not just plan it?</strong> The
+    <a href="https://hustlerjimmy.gumroad.com/l/money-dashboard" target="_blank" rel="noopener">Money Dashboard</a>
+    is an Excel/Sheets tracker with the same idea built in — budget vs actual by category, net worth,
+    savings goals, debt payoff and a subscription audit. Pay what you want from $10.
+    The calculator above stays free forever.
+  </div>
+
+  <section class="seo">
+    <h2>How the 50/30/20 budget works</h2>
+    <p>The 50/30/20 rule splits your <em>take-home</em> pay — the amount that actually lands in your
+    account after tax — into three buckets: 50% for needs, 30% for wants, and 20% for savings and
+    debt payoff. It's popular because it's simple enough to actually follow, and because it forces
+    a savings number instead of leaving savings as "whatever's left," which is usually nothing.</p>
+
+    <h3>What counts as a need vs a want</h3>
+    <p>This is where most people get stuck. A useful test: a <strong>need</strong> is something that
+    causes a real problem if you stop paying it this month — housing, utilities, groceries,
+    insurance, transport to work, minimum debt payments. A <strong>want</strong> is everything that
+    makes life better but wouldn't break anything — restaurants, streaming, hobbies, travel,
+    upgrades. Groceries are a need; the same food eaten at a restaurant is a want.</p>
+
+    <h3>What to do when the numbers don't fit</h3>
+    <p>If your needs are well over 50%, you're not failing at budgeting — you probably live somewhere
+    expensive, which is why the 60/20/20 option exists above. Housing is the line item that decides
+    this, and it's the hardest to change quickly. In the meantime, protect the savings bucket before
+    the wants bucket: it's the one that compounds.</p>
+
+    <h3>Common questions</h3>
+    <ul>
+      <li><strong>Should I use gross or take-home pay?</strong> Take-home. Budgeting off gross pay
+      builds a plan around money you never receive.</li>
+      <li><strong>Does debt payoff count as savings?</strong> Minimum payments are a need. Anything
+      extra you throw at debt belongs in the 20% bucket — paying off a 22% credit card is a better
+      guaranteed return than most investments.</li>
+      <li><strong>What about irregular income?</strong> Budget on your lowest typical month, and
+      treat anything above that as savings-bucket money.</li>
+      <li><strong>Is my data stored?</strong> No. This page makes zero network requests and has no
+      analytics — your numbers never leave your browser.</li>
+    </ul>
+
+    <h3>Related free tools</h3>
+    <p><a href="./index.html">InvoiceNow — free invoice generator</a> ·
+       <a href="./rate.html">RateRight — freelance rate calculator</a></p>
+  </section>
+
+  <footer>
+    <div>Free forever. Built end-to-end by <strong>Claude (an AI)</strong> as part of an honest experiment: earn $100 online.</div>
+    <div style="margin-top:4px">Zero network requests, no analytics, no signup.</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var period = "month";
+
+  function money(n) {
+    return "$" + Math.round(n).toLocaleString("en-US");
+  }
+
+  function getSplit() {
+    var v = $("style").value;
+    if (v === "custom") {
+      var n = parseFloat($("cN").value) || 0;
+      var w = parseFloat($("cW").value) || 0;
+      var s = parseFloat($("cS").value) || 0;
+      return [n, w, s];
+    }
+    return v.split(",").map(Number);
+  }
+
+  function calc() {
+    var raw = Math.max(0, parseFloat($("pay").value) || 0);
+    var monthly = period === "year" ? raw / 12 : raw;
+    var sp = getSplit();
+    var total = sp[0] + sp[1] + sp[2];
+
+    $("customWrap").style.display = $("style").value === "custom" ? "block" : "none";
+    if ($("style").value === "custom") {
+      $("customWarn").textContent = Math.abs(total - 100) < 0.01
+        ? "Adds up to 100% ✓"
+        : "Currently adds up to " + total + "% — adjust so it totals 100%.";
+      $("customWarn").style.color = Math.abs(total - 100) < 0.01 ? "#16a34a" : "#dc2626";
+    }
+    if (total <= 0) return;
+
+    var needs = monthly * sp[0] / 100;
+    var wants = monthly * sp[1] / 100;
+    var save  = monthly * sp[2] / 100;
+
+    $("aNeeds").textContent = money(needs);
+    $("aWants").textContent = money(wants);
+    $("aSave").textContent  = money(save);
+    $("fNeeds").style.width = (sp[0] / total * 100) + "%";
+    $("fWants").style.width = (sp[1] / total * 100) + "%";
+    $("fSave").style.width  = (sp[2] / total * 100) + "%";
+
+    var rate = sp[2] / total * 100;
+    var msg;
+    if (monthly <= 0) {
+      msg = "<strong>Enter your take-home pay above.</strong>";
+    } else if (rate >= 20) {
+      msg = "<strong>Savings rate: " + rate.toFixed(0) + "%</strong>" +
+        "That's " + money(save * 12) + " a year set aside — a strong rate. At this pace you build " +
+        "one month of expenses of buffer roughly every " +
+        Math.max(1, Math.round((needs + wants) / Math.max(save, 1))) + " months.";
+    } else if (rate >= 10) {
+      msg = "<strong>Savings rate: " + rate.toFixed(0) + "%</strong>" +
+        "That's " + money(save * 12) + " a year. Solid, and worth nudging upward when a raise or " +
+        "a finished debt payment frees up room.";
+    } else {
+      msg = "<strong>Savings rate: " + rate.toFixed(0) + "%</strong>" +
+        "That's " + money(save * 12) + " a year. Below 10% leaves little cushion — if your needs " +
+        "bucket is forcing this, housing is usually the line that decides it.";
+    }
+    $("verdict").innerHTML = msg;
+  }
+
+  $("tMonth").addEventListener("click", function () {
+    period = "month"; this.classList.add("on"); $("tYear").classList.remove("on"); calc();
+  });
+  $("tYear").addEventListener("click", function () {
+    period = "year"; this.classList.add("on"); $("tMonth").classList.remove("on"); calc();
+  });
+  document.addEventListener("input", calc);
+  document.addEventListener("change", calc);
+  calc();
+})();
+</script>
+</body>
+</html>

@@ -9,6 +9,7 @@ never leaves your device.
 | Tool | What it does | Link |
 |---|---|---|
 | **InvoiceNow** | Create and print a professional invoice. Line items, tax, discount, logo, 7 currencies, save as PDF. Unlimited and free. | [Open](https://jimmyhustla36-ship-it.github.io/invoicenow/) |
+| **BudgetSplit** | 50/30/20 budget calculator. Splits take-home pay into needs, wants and savings, with custom splits and savings-rate feedback. | [Open](https://jimmyhustla36-ship-it.github.io/invoicenow/budget.html) |
 | **RateRight** | Freelance hourly rate calculator. Works backwards from the income you want to keep, after business costs, tax set-aside and non-billable hours. | [Open](https://jimmyhustla36-ship-it.github.io/invoicenow/rate.html) |
 
 ## Why they exist
